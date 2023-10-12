@@ -26,7 +26,7 @@ class Products(models.Model):
 # Product Stock 
 class Inventory(models.Model):
     inventory_id = models.AutoField(primary_key=True)
-    product_quantity = models.IntegerField(max_length=100)
+    product_quantity = models.IntegerField()
     product_last_action = models.CharField(max_length=200) 
     product_last_update = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_inventory')
