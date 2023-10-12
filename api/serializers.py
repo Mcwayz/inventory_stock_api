@@ -10,7 +10,6 @@ class SectionSerializer(serializers.ModelSerializer):
         
         
 # Product Serializer
-
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
@@ -18,8 +17,7 @@ class ProductSerializer(serializers.ModelSerializer):
         
 
 # Inventory Serializer
-
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Products
-        fields = ('inventory_id', 'product_name', 'product_quantity', 'product_last_action','product_last_update','section')
+        model = Inventory
+        fields = ('inventory_id', 'product_quantity', 'product_last_action', 'product_last_update', 'product')

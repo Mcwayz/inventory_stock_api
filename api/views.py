@@ -105,7 +105,45 @@ def addProduct(request):
 def addStock(request):
     serializer = InventorySerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
+        # Extract data from the serializer
+        product_id = serializer.validated_data['product']
+        quantity = serializer.validated_data['product_quantity']
+
+        try:
+            # Attempt to get an existing inventory entry for the product
+            inventory_entry = Inventory.objects.get(product=product_id)
+            # Update the existing entry by incrementing the quantity
+            inventory_entry.product_quantity += quantity
+            inventory_entry.save()
+            return Response(InventorySerializer(inventory_entry).data)
+        except Inventory.DoesNotExist:
+            # If no existing entry, create a new one
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+# Update Stock by Outer Product Case Barcode
+@api_view(['POST'])
+def updateStockByOuterProductCaseBarcode(request):
+    outer_product_case_barcode = request.data.get('outer_product_case_barcode')
+    product_quantity = request.data.get('product_quantity')  # The quantity to update
+    product = get_object_or_404(Products, outer_product_case_barcode=outer_product_case_barcode)
+
+    # Check if there's an existing inventory entry for the product
+    try:
+        inventory_entry = Inventory.objects.get(product=product)
+        inventory_entry.product_quantity = product_quantity
+        inventory_entry.save()
+
+        # Serialize and return the updated inventory entry
+        serializer = InventorySerializer(inventory_entry)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    except Inventory.DoesNotExist:
+        return Response(
+            {'Success': False, 'Message': 'No Inventory Entry Found For The Provided Product.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    

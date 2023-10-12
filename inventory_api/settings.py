@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'rest_framework',
-    'frontend',
+    'dashboard',
     'base',
     'api',
 
