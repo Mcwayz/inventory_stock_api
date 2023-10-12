@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
-from base.models import ProductSection, Products, Inventory
+from base.models import ProductSection, Products, Inventory, Dispatched
 from .serializers import ProductSerializer, SectionSerializer, InventorySerializer
 
 #                            #
@@ -27,8 +27,8 @@ def getSections(request):
 # Get Products
 @api_view(['GET'])
 def getProducts(request):
-    sections = Products.objects.all()
-    serializer = ProductSection(sections, many=True)
+    products = Products.objects.all()
+    serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
 
@@ -44,15 +44,21 @@ def getInventory(request):
 @api_view(['GET'])
 def getProduct(request, pk):
     product = get_object_or_404(Products, pk=pk)
-    serializer = ProductSerializer(product, many=True)
+    serializer = ProductSerializer(product)
     return Response(serializer.data)
 
 # Get Section
-
 @api_view(['GET'])
 def getSection(request, pk):
     section = get_object_or_404(ProductSection, pk=pk)
-    serializer = SectionSerializer(section, many=True)
+    serializer = SectionSerializer(section)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getInventoryDetails(request, pk):
+    inventory =  get_object_or_404(Inventory, pk=pk)
+    serializer = InventorySerializer(inventory)
     return Response(serializer.data)
 
 
@@ -128,14 +134,37 @@ def addStock(request):
 @api_view(['POST'])
 def updateStockByOuterProductCaseBarcode(request):
     outer_product_case_barcode = request.data.get('outer_product_case_barcode')
-    product_quantity = request.data.get('product_quantity')  # The quantity to update
+    product_quantity = request.data.get('product_quantity', 1)  # Default to 1 if not provided
+    product_last_action = request.data.get('product_last_action')
+
     product = get_object_or_404(Products, outer_product_case_barcode=outer_product_case_barcode)
 
     # Check if there's an existing inventory entry for the product
     try:
         inventory_entry = Inventory.objects.get(product=product)
-        inventory_entry.product_quantity = product_quantity
-        inventory_entry.save()
+
+        if product_last_action == 'Subtraction':
+            # Subtract the provided quantity from the existing quantity
+            if product_quantity <= inventory_entry.product_quantity:
+                inventory_entry.product_quantity -= product_quantity
+                inventory_entry.save()
+
+                # Create a new Dispatched entry
+                Dispatched.objects.create(
+                    dispatch_quantity=product_quantity,
+                    product=product,
+                    inventory=inventory_entry
+                )
+
+            else:
+                return Response(
+                    {'Success': False, 'Message': 'Not enough stock for subtraction.'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        elif product_last_action == 'Subtraction':
+            inventory_entry.product_quantity += product_quantity
+            inventory_entry.save()
 
         # Serialize and return the updated inventory entry
         serializer = InventorySerializer(inventory_entry)
@@ -146,4 +175,3 @@ def updateStockByOuterProductCaseBarcode(request):
             {'Success': False, 'Message': 'No Inventory Entry Found For The Provided Product.'},
             status=status.HTTP_404_NOT_FOUND
         )
-    

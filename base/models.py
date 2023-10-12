@@ -31,4 +31,12 @@ class Inventory(models.Model):
     product_last_update = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_inventory')
     
+    
+ # Product Dispatch   
+class Dispatched(models.Model):
+    dispatch_id = models.AutoField(primary_key=True)
+    dispatch_date = models.DateTimeField(auto_now_add=True)
+    dispatch_quantity = models.IntegerField()
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_dispatch')
+    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name='product_dispatch')
 
