@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view
 from base.models import ProductSection, Products, Inventory, Dispatched
 from .serializers import ProductSerializer, SectionSerializer, InventorySerializer
 
+
 #                            #
 #                            #
 #                            #
@@ -176,19 +177,19 @@ def updateStockByOuterProductCaseBarcode(request):
         
         
 
-# Get The Product ID Via The Barcode
+# Get The Product ID via The Barcode
 
 @api_view(['POST'])
-def getProductIDByBarcode(request):
+def getProductInfoByBarcode(request):
     outer_product_case_barcode = request.data.get('outer_product_case_barcode')
     try:
         product = get_object_or_404(Products, outer_product_case_barcode=outer_product_case_barcode)
         product_id = product.product_id
-        return Response({'product_id': product_id})
+        product_name = product.product_name
+        return Response({'product_id': product_id, 'product_name': product_name})
     except Products.DoesNotExist:
         return Response(
             {'Success': False, 'Message': 'Product not found for the provided outer_product_case_barcode.'},
             status=status.HTTP_404_NOT_FOUND
         )
-        
         

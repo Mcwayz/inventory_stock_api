@@ -6,7 +6,6 @@ from . import views
 # URLs / Routes for endpoints
 
 urlpatterns = [
-    
     path('addInventory/', views.addStock),   
     path('addSection/', views.addSection),
     path('addProduct/', views.addProduct),
@@ -17,5 +16,5 @@ urlpatterns = [
     path('getProduct/<str:pk>/', views.getProduct),
     path('getInventoryProduct/<str:pk>/', views.getInventoryDetails),
     path('dispatchProduct/', views.updateStockByOuterProductCaseBarcode),
-    path('getProductId/', views.getProductIDByBarcode, name='get_product_id_by_barcode'),
+    path('getProductId/', views.getProductInfoByBarcode, name='get_product_id_by_barcode'),
 ]
