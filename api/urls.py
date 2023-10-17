@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     
-    path('addInventory/', views.addStock),
+    path('addInventory/', views.addStock),   
     path('addSection/', views.addSection),
     path('addProduct/', views.addProduct),
     path('getSections/', views.getSections),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('getProduct/<str:pk>/', views.getProduct),
     path('getInventoryProduct/<str:pk>/', views.getInventoryDetails),
     path('dispatchProduct/', views.updateStockByOuterProductCaseBarcode),
+    path('getProductId/', views.getProductIDByBarcode, name='get_product_id_by_barcode'),
 ]

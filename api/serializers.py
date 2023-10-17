@@ -15,7 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Products
         fields = ('product_id', 'product_name', 'product_desc', 'product_unit_barcode_no','outer_product_case_barcode','section')
         
-
+        
 # Inventory Serializer
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:

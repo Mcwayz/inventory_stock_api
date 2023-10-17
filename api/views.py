@@ -104,6 +104,7 @@ def addProduct(request):
         return Response(serializer.data)
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
     
     
 # Add Inventory
@@ -128,21 +129,19 @@ def addStock(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response({'Success': False, 'Errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
+ 
     
 # Update Stock by Outer Product Case Barcode
 @api_view(['POST'])
 def updateStockByOuterProductCaseBarcode(request):
     outer_product_case_barcode = request.data.get('outer_product_case_barcode')
     product_quantity = request.data.get('product_quantity', 1)  # Default to 1 if not provided
-    product_last_action = request.data.get('product_last_action')
-
+    product_last_action = request.data.get('product_last_action', 'Subtraction')
     product = get_object_or_404(Products, outer_product_case_barcode=outer_product_case_barcode)
 
     # Check if there's an existing inventory entry for the product
     try:
         inventory_entry = Inventory.objects.get(product=product)
-
         if product_last_action == 'Subtraction':
             # Subtract the provided quantity from the existing quantity
             if product_quantity <= inventory_entry.product_quantity:
@@ -158,20 +157,38 @@ def updateStockByOuterProductCaseBarcode(request):
 
             else:
                 return Response(
-                    {'Success': False, 'Message': 'Not enough stock for subtraction.'},
+                    {'Success': False, 'Message': 'Not Enough Stock For Subtraction...'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
         elif product_last_action == 'Subtraction':
             inventory_entry.product_quantity += product_quantity
             inventory_entry.save()
-
         # Serialize and return the updated inventory entry
         serializer = InventorySerializer(inventory_entry)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     except Inventory.DoesNotExist:
         return Response(
-            {'Success': False, 'Message': 'No Inventory Entry Found For The Provided Product.'},
+            {'Success': False, 'Message': 'No Inventory Entry Found For The Provided Product...'},
             status=status.HTTP_404_NOT_FOUND
         )
+        
+        
+
+# Get The Product ID Via The Barcode
+
+@api_view(['POST'])
+def getProductIDByBarcode(request):
+    outer_product_case_barcode = request.data.get('outer_product_case_barcode')
+    try:
+        product = get_object_or_404(Products, outer_product_case_barcode=outer_product_case_barcode)
+        product_id = product.product_id
+        return Response({'product_id': product_id})
+    except Products.DoesNotExist:
+        return Response(
+            {'Success': False, 'Message': 'Product not found for the provided outer_product_case_barcode.'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+        
+        
