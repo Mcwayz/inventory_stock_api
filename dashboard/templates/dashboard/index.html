@@ -240,36 +240,39 @@
                   <div class="col-md-6 mb-4 stretch-card transparent">
                       <div class="card card-tale">
                           <div class="card-body">
-                              <p class="fs-30 mb-2">{{ dispatched_stock }}</p>
+                              <p class="fs-30 mb-2">Dispatched : {{ dispatched_stock }}</p><br>
                               <p class="mb-4">Dispatched Stock : {{ dispatched_stock }}</p>
                               <p>Total Number of Dispatched Stock</p>
                           </div>
                       </div>
                   </div>
+
                   <div class="col-md-6 mb-4 stretch-card transparent">
                       <div class="card card-dark-blue">
                           <div class="card-body">
-                              <p class="fs-30 mb-2">{{ warehouse_stock }} </p>
+                              <p class="fs-30 mb-2">Overall : {{ warehouse_stock }} </p><br>
                               <p class="mb-4">Warehouse Stock : {{ warehouse_stock }}</p>
                               <p>Total Number of Warehouse Stock</p>
                           </div>
                       </div>
                   </div>
               </div>
+
               <div class="row">
                   <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
                       <div class="card card-light-blue">
                           <div class="card-body">
-                            <p class="fs-30 mb-2">{{ amigo_products }}</p>
+                            <p class="fs-30 mb-2">Amigo : {{ amigo_products }}</p><br>
                               <p class="mb-4">Amigo Products : {{ amigo_products }}</p>
                               <p>Total Number of Amigo Products</p>
                           </div>
                       </div>
                   </div>
+                  
                   <div class="col-md-6 stretch-card transparent">
                       <div class="card card-light-danger">
                           <div class="card-body">
-                            <p class="fs-30 mb-2">{{ sobi_products }}</p>
+                            <p class="fs-30 mb-2">Sobi: {{ sobi_products }}</p><br>
                               <p class="mb-4">Sobi Products : {{ sobi_products }}</p>
                               <p>Total Number of Sobi Products</p>
                           </div>
@@ -484,89 +487,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-7 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title mb-0">Top Products</p>
-                  <div class="table-responsive">
-                    <table class="table table-striped table-borderless">
-                      <thead>
-                        <tr>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Date</th>
-                          <th>Status</th>
-                        </tr>  
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>Search Engine Marketing</td>
-                          <td class="font-weight-bold">ZMW 362</td>
-                          <td>21 Sep 2018</td>
-                          <td class="font-weight-medium"><div class="badge badge-success">Completed</div></td>
-                        </tr>
-
-                        <tr>
-                          <td>Display Advertising</td>
-                          <td class="font-weight-bold">ZMW 551</td>
-                          <td>28 Sep 2018</td>
-                          <td class="font-weight-medium"><div class="badge badge-warning">Pending</div></td>
-                        </tr>
-
-                        <tr>
-                          <td>E-Mail Marketing</td>
-                          <td class="font-weight-bold">ZMW 781</td>
-                          <td>01 Nov 2018</td>
-                          <td class="font-weight-medium"><div class="badge badge-danger">Cancelled</div></td>
-                        </tr>
-
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-5 grid-margin stretch-card">
-							<div class="card">
-								<div class="card-body">
-									<h4 class="card-title">To Do Lists</h4>
-									<div class="list-wrapper pt-2">
-										<ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Meeting with Factory Team
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-											<li class="completed">
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														KYC Documents for New Customer
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-
-											<li>
-												<div class="form-check form-check-flat">
-													<label class="form-check-label">
-														<input class="checkbox" type="checkbox">
-														Level Up for Warehouse
-													</label>
-												</div>
-												<i class="remove ti-close"></i>
-											</li>
-										</ul>
-                  </div>
-								</div>
-							</div>
-            </div>
-          </div>
+ 
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
